@@ -39,7 +39,6 @@ class FaceDetectorPainter extends CustomPainter {
       backgroundColor: Colors.black54,
     );
 
-    int faceIdx = 0;
     for (final Face face in faces) {
       final left = translateX(
         face.boundingBox.left,
@@ -70,8 +69,10 @@ class FaceDetectorPainter extends CustomPainter {
         cameraLensDirection,
       );
 
-      final playerNum = faceIdx;
-      final isEliminated = eliminatedPlayers[playerNum] ?? false;
+      final trackingId = face.trackingId;
+      if (trackingId == null) continue;
+
+      final isEliminated = eliminatedPlayers[trackingId] ?? false;
       final paint = isEliminated ? paintRed : paintGreen;
 
       // Draw bounding box
@@ -83,8 +84,8 @@ class FaceDetectorPainter extends CustomPainter {
       // Draw player number and eliminated status
       final textSpan = TextSpan(
         text: isEliminated
-            ? 'Player ${playerNum + 1} ELIMINATED'
-            : 'Player ${playerNum + 1}',
+            ? 'Player ${trackingId % 100} ELIMINATED'
+            : 'Player ${trackingId % 100}',
         style: textStyle.copyWith(
           color: isEliminated ? Colors.red : Colors.green,
         ),
@@ -99,7 +100,6 @@ class FaceDetectorPainter extends CustomPainter {
       );
       textPainter.paint(canvas, Offset(left, top - 24));
 
-      faceIdx++;
 
       void paintContour(FaceContourType type) {
         final contour = face.contours[type];

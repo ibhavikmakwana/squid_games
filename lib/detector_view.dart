@@ -7,7 +7,7 @@ import 'camera_view.dart';
 enum DetectorViewMode { liveFeed, gallery }
 
 class DetectorView extends StatefulWidget {
-  DetectorView({
+  const DetectorView({
     super.key,
     required this.title,
     required this.onImage,
